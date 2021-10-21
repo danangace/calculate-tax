@@ -35,8 +35,10 @@ export default {
           totalTax += (baseRange * tax[i].percentage) / 100;
           remainingTaxableSalary -= baseRange
         } else if (remainingTaxableSalary < baseRange && remainingTaxableSalary >= 0) {
-          totalTax += (baseRange * tax[i].percentage) / 100;
+          totalTax += (remainingTaxableSalary * tax[i].percentage) / 100;
           remainingTaxableSalary -= baseRange;
+        } else {
+          break;
         }
       }
       console.log(totalTax)
@@ -45,7 +47,7 @@ export default {
   },
   created () {
     // please change this value for testing
-    this.calculateTax(540000000)
+    this.calculateTax(60000000)
   }
 }
 </script>
