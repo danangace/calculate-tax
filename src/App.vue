@@ -1,17 +1,51 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <p>Total Tax : {{ tax }}</p> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+const tax = [
+  { range: 50000000, percentage: 5 }, // 490jt
+  { range: 250000000, percentage: 15 }, // 
+  { range: 500000000, percentage: 25 },
+  { range: "all", percentage: 30 },
+];
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      tax: 0
+    }
+  },
+  methods: {
+    calculateTax(taxableSalary) {
+      let remainingTaxableSalary = taxableSalary;
+      let totalTax = 0;
+      for (let i = 0; i < tax.length; i++) {
+        if (tax[i].range === 'all') {
+          totalTax += (remainingTaxableSalary * tax[i].percentage) / 100;
+          break;
+        }
+
+        const baseRange = i > 0 ? tax[i].range - tax[i - 1].range : tax[i].range;
+        if (remainingTaxableSalary > baseRange) {
+          totalTax += (baseRange * tax[i].percentage) / 100;
+          remainingTaxableSalary -= baseRange
+        } else if (remainingTaxableSalary < baseRange && remainingTaxableSalary >= 0) {
+          totalTax += (baseRange * tax[i].percentage) / 100;
+          remainingTaxableSalary -= baseRange;
+        }
+      }
+      console.log(totalTax)
+      // this.tax = totalTax
+    }
+  },
+  created () {
+    // please change this value for testing
+    this.calculateTax(540000000)
   }
 }
 </script>
