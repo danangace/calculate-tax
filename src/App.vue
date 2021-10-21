@@ -31,10 +31,10 @@ export default {
         }
 
         const baseRange = i > 0 ? tax[i].range - tax[i - 1].range : tax[i].range;
-        if (remainingTaxableSalary > baseRange) {
+        if (remainingTaxableSalary >= baseRange) {
           totalTax += (baseRange * tax[i].percentage) / 100;
           remainingTaxableSalary -= baseRange
-        } else if (remainingTaxableSalary < baseRange && remainingTaxableSalary >= 0) {
+        } else if (remainingTaxableSalary <= baseRange && remainingTaxableSalary > 0) {
           totalTax += (remainingTaxableSalary * tax[i].percentage) / 100;
           remainingTaxableSalary -= baseRange;
         } else {
@@ -47,7 +47,7 @@ export default {
   },
   created () {
     // please change this value for testing
-    this.calculateTax(60000000)
+    this.calculateTax(10000000)
   }
 }
 </script>
